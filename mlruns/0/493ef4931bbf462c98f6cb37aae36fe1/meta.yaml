@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/Rizqy/Downloads/Workflow-CI/mlruns/0/493ef4931bbf462c98f6cb37aae36fe1/artifacts
+end_time: 1759844441236
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 493ef4931bbf462c98f6cb37aae36fe1
+run_name: bright-shark-947
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1759844424722
+status: 3
+tags: []
+user_id: Rizqy
