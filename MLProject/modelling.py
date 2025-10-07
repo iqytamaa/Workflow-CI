@@ -5,9 +5,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
-# 1. Muat data yang sudah diproses dan di-encode
-# Path ini relatif terhadap lokasi file MLProject
-df = pd.read_csv("./namadataset_preprocessing/heart_disease_processed.csv")
+# 1. Muat data yang sudah diproses
+# Path ini relatif, yang akan bekerja dengan benar saat dijalankan via 'mlflow run'
+processed_data_path = "./namadataset_preprocessing/heart_disease_processed.csv"
+df = pd.read_csv(processed_data_path)
 
 # Pisahkan fitur (X) dan target (y)
 X = df.drop("num", axis=1)
