@@ -7,14 +7,14 @@ WORKDIR /app
 # Salin file dependensi
 COPY ./MLProject/conda.yaml .
 
-# Instal dependensi menggunakan Conda (lebih andal untuk ML)
-RUN pip install conda && conda env create -f conda.yaml -n mlflow-env
+# Instal dependensi dari file conda.yaml menggunakan pip
+# Ini lebih cepat daripada membuat ulang lingkungan conda
+RUN pip install mlflow==2.9.2 scikit-learn==1.3.2 pandas==2.1.1
 
-# Salin model yang sudah dilatih (dari hasil run MLflow)
-# Kita akan menyalin seluruh folder mlruns
-COPY ./MLProject/mlruns /app/mlruns
+# Salin folder proyek MLProject
+COPY ./MLProject /app
 
 # Perintah untuk menjalankan server prediksi MLflow saat container dijalankan
-# Ganti <RUN_ID> dengan ID run yang sebenarnya nanti di workflow
+# Kita akan gunakan RUN_ID yang didapat dari workflow
 ARG RUN_ID
-CMD exec conda run -n mlflow-env mlflow models serve -m /app/mlruns/0/$RUN_ID/artifacts/model -h 0.0.0.0 -p 8080
+CMD mlflow models serve -m /app/mlruns/0/$RUN_ID/artifacts/model -h 0.0.0.0 -p 8080
