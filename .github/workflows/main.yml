@@ -17,15 +17,15 @@ jobs:
         with:
           python-version: "3.11"
 
-      # --- PERUBAHAN DI SINI: INSTAL SEMUA DALAM SATU LANGKAH ---
-      - name: Install all dependencies
-        run: pip install mlflow==2.9.2 scikit-learn==1.3.2 pandas==2.1.1 docker "urllib3<2.0"
+      # Instal semua dependensi dalam satu langkah untuk resolusi terbaik
+      - name: Install dependencies
+        run: pip install mlflow==2.9.2 scikit-learn==1.3.2 pandas==2.1.1 "docker<7" "urllib3<2.0"
 
       - name: Run Python Training Script
         working-directory: ./MLProject
         run: python modelling.py
 
-      # Setup environment Docker
+      # Setup lingkungan Docker
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
