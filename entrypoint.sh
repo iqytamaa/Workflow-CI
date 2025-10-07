@@ -1,7 +1,15 @@
 #!/bin/sh
+set -e
 
-# Baca RUN_ID dari file yang ada di dalam container
+# Baris ini mengaktifkan perintah 'conda' di dalam skrip
+. /opt/conda/etc/profile.d/conda.sh
+
+# Aktifkan environment yang sudah kita buat
+conda activate mlflow-env
+
+# Baca RUN_ID dari file
 RUN_ID=$(cat /app/run_id.txt)
 
-# Jalankan perintah mlflow serve dengan RUN_ID yang sudah dibaca
-exec conda run -n mlflow-env mlflow models serve -m /app/mlruns/0/$RUN_ID/artifacts/model -h 0.0.0.0 -p 8080 --no-conda
+# Sekarang jalankan mlflow serve secara langsung
+echo "Starting MLflow server for run_id: $RUN_ID"
+exec mlflow models serve -m /app/mlruns/0/$RUN_ID/artifacts/model -h 0.0.0.0 -p 8080 --no-conda
