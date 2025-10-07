@@ -30,8 +30,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push Docker image
+        env:
+          MLFLOW_TRACKING_URI: ./mlruns
         run: |
-          RUN_ID=$(cat run_id.txt)
+          RUN_ID=$(cat MLProject/run_id.txt)
           mlflow models build-docker \
             --model-uri "runs:/$RUN_ID/model" \
             --name "${{ secrets.DOCKERHUB_USERNAME }}/workflow-ci-model"
