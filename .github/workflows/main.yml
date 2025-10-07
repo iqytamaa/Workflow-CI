@@ -17,15 +17,20 @@ jobs:
         with:
           python-version: "3.11"
 
-      # Menginstal semua dependensi dalam satu baris
+      # Langkah instalasi dependensi utama
       - name: Install dependencies
         run: pip install mlflow==2.9.2 scikit-learn==1.3.2 pandas==2.1.1 docker
+
+      # --- PERBAIKAN FINAL DI SINI ---
+      # Paksa downgrade urllib3 untuk menghindari bug http+docker
+      - name: Downgrade urllib3 for compatibility
+        run: pip install "urllib3<2.0"
 
       - name: Run Python Training Script
         working-directory: ./MLProject
         run: python modelling.py
 
-      # Menyiapkan lingkungan Docker di GitHub Actions
+      # Setup lingkungan Docker
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -40,8 +45,6 @@ jobs:
 
       - name: Build and push Docker image
         working-directory: ./MLProject
-        env:
-          DOCKER_HOST: "unix:///var/run/docker.sock"
         run: |
           RUN_ID=$(cat run_id.txt)
           mlflow models build-docker \
