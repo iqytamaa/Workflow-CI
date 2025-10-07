@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/Rizqy/Downloads/Workflow-CI/mlruns/0/models/m-0653349f4970450c9efb06927a09f70d/artifacts
+creation_timestamp: 1759842467655
+experiment_id: '0'
+last_updated_timestamp: 1759842482363
+model_id: m-0653349f4970450c9efb06927a09f70d
+model_type: null
+name: model
+source_run_id: deaf1212e668441c936fbd8e49f88836
+status: 2
+status_message: null

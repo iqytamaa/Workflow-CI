@@ -23,8 +23,27 @@ jobs:
       - name: Run MLflow Project
         run: mlflow run ./MLProject --env-manager=local
 
+      # --- BAGIAN BARU UNTUK DOCKER ---
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Read MLflow Run ID
+        id: read_run_id
+        run: echo "RUN_ID=$(cat MLProject/run_id.txt)" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image
+        run: |
+          mlflow models build-docker \
+            --model-uri "runs:/${{ steps.read_run_id.outputs.RUN_ID }}/model" \
+            --name "${{ secrets.DOCKERHUB_USERNAME }}/workflow-ci-model"
+
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/workflow-ci-model
+      # --- SELESAI BAGIAN BARU ---
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
           name: model-artifact
-          path: mlruns/
+          path: MLProject/mlruns/
