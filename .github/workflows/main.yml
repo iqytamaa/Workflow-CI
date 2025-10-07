@@ -21,7 +21,8 @@ jobs:
         run: pip install mlflow==2.9.2 scikit-learn==1.3.2 pandas==2.1.1
 
       - name: Run MLflow Project
-        run: mlflow run ./MLProject --env-manager=local
+        working-directory: ./MLProject
+        run: mlflow run . --env-manager=local
 
       # --- BAGIAN BARU UNTUK DOCKER ---
       - name: Log in to Docker Hub
