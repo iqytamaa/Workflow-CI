@@ -21,22 +21,15 @@ jobs:
         run: pip install mlflow==2.9.2 scikit-learn==1.3.2 pandas==2.1.1
 
       - name: Run MLflow Project
-        working-directory: ./MLProject
-        run: mlflow run . --env-manager=local
+        run: mlflow run ./MLProject --env-manager=local
 
-      # --- BAGIAN BARU UNTUK DOCKER ---
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Read MLflow Run ID
-        id: read_run_id
-        run: echo "RUN_ID=$(cat MLProject/run_id.txt)" >> $GITHUB_OUTPUT
-
       - name: Build and push Docker image
-        working-directory: ./MLProject
         run: |
           RUN_ID=$(cat run_id.txt)
           mlflow models build-docker \
@@ -44,9 +37,9 @@ jobs:
             --name "${{ secrets.DOCKERHUB_USERNAME }}/workflow-ci-model"
 
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/workflow-ci-model
-      # --- SELESAI BAGIAN BARU ---
+
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
           name: model-artifact
-          path: MLProject/mlruns/
+          path: mlruns/
