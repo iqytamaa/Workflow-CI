@@ -6,6 +6,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
 # 1. Muat data
+# Path ini relatif dari dalam folder MLProject
 df = pd.read_csv("./namadataset_preprocessing/heart_disease_processed.csv")
 
 # Pisahkan fitur dan target
@@ -15,13 +16,14 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 with mlflow.start_run() as run:
     run_id = run.info.run_id
-    # Simpan run_id di dalam folder MLProject
-    # Simpan run_id.txt di direktori utama, tempat workflow berjalan
+    # Simpan run_id.txt di DUA tempat untuk memastikan ia ditemukan
+    with open("run_id.txt", "w") as f:
+        f.write(run_id)
     with open("../run_id.txt", "w") as f:
         f.write(run_id)
 
     # Latih model
-    model = LogisticRegression(max_iter=1000)
+    model = LogisticRegression(max_iter=2000) # Iterasi ditambah untuk konvergensi
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
