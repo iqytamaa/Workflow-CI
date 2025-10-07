@@ -36,9 +36,11 @@ jobs:
         run: echo "RUN_ID=$(cat MLProject/run_id.txt)" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker image
+        working-directory: ./MLProject
         run: |
+          RUN_ID=$(cat run_id.txt)
           mlflow models build-docker \
-            --model-uri "runs:/${{ steps.read_run_id.outputs.RUN_ID }}/model" \
+            --model-uri "runs:/$RUN_ID/model" \
             --name "${{ secrets.DOCKERHUB_USERNAME }}/workflow-ci-model"
 
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/workflow-ci-model
