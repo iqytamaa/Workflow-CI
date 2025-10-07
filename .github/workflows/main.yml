@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  train-and-build:
+  train-model:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -17,13 +17,18 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install dependencies
+      # Instal dependensi dalam dua langkah terpisah
+      - name: Install MLflow & core dependencies
         run: pip install mlflow==2.9.2 scikit-learn==1.3.2 pandas==2.1.1
+
+      - name: Install compatible Docker dependencies
+        run: pip install "docker<7" "urllib3<2.0"
 
       - name: Run Python Training Script
         working-directory: ./MLProject
         run: python modelling.py
 
+      # Setup lingkungan Docker
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -36,17 +41,17 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image from Dockerfile
+      - name: Build and push Docker image
+        working-directory: ./MLProject
+        env:
+          DOCKER_HOST: "unix:///var/run/docker.sock"
         run: |
-          # Baca RUN_ID dari file
-          RUN_ID=$(cat MLProject/run_id.txt)
-          IMAGE_NAME="${{ secrets.DOCKERHUB_USERNAME }}/workflow-ci-model:latest"
+          RUN_ID=$(cat run_id.txt)
+          mlflow models build-docker \
+            --model-uri "runs:/$RUN_ID/model" \
+            --name "${{ secrets.DOCKERHUB_USERNAME }}/workflow-ci-model"
 
-          # Bangun image menggunakan Dockerfile, teruskan RUN_ID sebagai argumen
-          docker build --build-arg RUN_ID=$RUN_ID -t $IMAGE_NAME .
-
-          # Push image ke Docker Hub
-          docker push $IMAGE_NAME
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/workflow-ci-model
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
