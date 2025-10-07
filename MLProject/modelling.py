@@ -16,7 +16,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 with mlflow.start_run() as run:
     run_id = run.info.run_id
     # Simpan run_id di dalam folder MLProject
-    with open("run_id.txt", "w") as f:
+    # Simpan run_id.txt di direktori utama, tempat workflow berjalan
+    with open("../run_id.txt", "w") as f:
         f.write(run_id)
 
     # Latih model
