@@ -27,5 +27,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: model-artifact
-          path: |
-            MLProject/mlruns/
+          path: mlruns/
