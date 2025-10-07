@@ -1,0 +1,12 @@
+# Folder hasil MLflow
+mlruns/
+mlartifacts/
+
+# File sementara
+run_id.txt
+
+# File Zip dan arsip lainnya
+*.zip
+
+# Folder virtual environment
+venv/
