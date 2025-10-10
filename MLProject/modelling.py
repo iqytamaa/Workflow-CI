@@ -17,6 +17,7 @@ X = df[FEATURES]
 y = df[TARGET]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
 with mlflow.start_run() as run:
     run_id = run.info.run_id
     # Simpan run_id di folder yang sama dengan skrip ini

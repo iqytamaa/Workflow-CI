@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/MLProject/mlruns/0/ce085085b544425f87bd792461f2a10d/artifacts
+end_time: 1759856054769
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ce085085b544425f87bd792461f2a10d
+run_name: trusting-crane-406
+run_uuid: ce085085b544425f87bd792461f2a10d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1759856051871
+status: 3
+tags: []
+user_id: runner
